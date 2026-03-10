@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "express": "^5.2.1",
+    "i": "^0.3.7"
+  },
+  "name": "gym_workout_planner",
+  "version": "1.0.0",
+  "description": "This project is licensed under the AGPL-3.0 License.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node backend/src/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
