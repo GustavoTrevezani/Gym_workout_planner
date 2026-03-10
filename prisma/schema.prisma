@@ -1,0 +1,107 @@
+
+generator client {
+  provider = "prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  height    Float
+  weight    Float
+  age       Int
+
+  workoutSessions WorkoutSession[]
+  workouts  Workout[]
+}
+
+model Workout {
+  id        Int      @id @default(autoincrement())
+  name      String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  days      WorkoutDay[]
+  workoutSessions WorkoutSession[]
+}
+
+model MuscleGroup {
+  id       Int               @id @default(autoincrement())
+  name     String
+  subGroups MuscleSubGroup[]
+}
+
+model MuscleSubGroup {
+  id          Int          @id @default(autoincrement())
+  name        String
+  muscleGroupId Int
+  muscleGroup MuscleGroup  @relation(fields: [muscleGroupId], references: [id])
+  exercises   Exercise[]
+}
+
+model Exercise {
+  id            Int            @id @default(autoincrement())
+  name          String
+  muscleSubGroupId Int
+  muscleSubGroup MuscleSubGroup @relation(fields: [muscleSubGroupId], references: [id])
+  workoutExercises WorkoutExercise[]
+  workoutSets WorkoutSet[]
+
+}
+
+model WorkoutExercise {
+  id          Int      @id @default(autoincrement())
+  workoutDayId  Int
+  exerciseId  Int
+  sets        Int
+  reps        Int
+  restTime    Int
+  order       Int
+  supersetGroup    Int?
+  workoutDay  WorkoutDay @relation(fields: [workoutDayId], references: [id])
+  exercise    Exercise @relation(fields: [exerciseId], references: [id])
+}
+
+enum WeekDay {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+model WorkoutDay {
+  id        Int @id @default(autoincrement())
+  day       WeekDay
+  workoutId Int
+  workout   Workout @relation(fields: [workoutId], references: [id])
+  exercises WorkoutExercise[]
+  @@unique([workoutId, day])
+}
+
+model WorkoutSession {
+  id Int @id @default(autoincrement())
+  workoutId Int
+  userId    Int
+  workout Workout @relation(fields: [workoutId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+  startedAt DateTime
+  finishedAt DateTime?
+  sets WorkoutSet[]
+  @@index([userId, startedAt])
+}
+
+model WorkoutSet {
+  id Int @id @default(autoincrement())
+  sessionId Int
+  exerciseId Int
+  sets Json
+  session WorkoutSession @relation(fields: [sessionId], references: [id])
+  exercise Exercise       @relation(fields: [exerciseId], references: [id])
+}
