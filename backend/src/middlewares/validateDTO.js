@@ -11,7 +11,7 @@ function validateDTO(schema) {
       });
     }
 
-    req.body = result.data;
+    req.validateData = result.data;
     next();
   };
 }

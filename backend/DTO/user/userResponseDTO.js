@@ -5,8 +5,4 @@ function userResponseDTO(user) {
   };
 }
 
-const responseDTO = {
-  userResponseDTO,
-};
-
-export default responseDTO;
+export default userResponseDTO;

@@ -1,6 +1,7 @@
 import passwordArgon2 from "../utils/password.js";
 
 import userRepository from "../repositories/userRepositories.js";
+import { email } from "zod";
 
 async function createUserService(userData) {
   const { name, email, password, height, weight, age } = userData;
@@ -34,9 +35,26 @@ async function getUserById(id) {
   return user;
 }
 
+async function patchUpdateUser(id, data) {
+  const user = await userRepository.findById(id);
+
+  if (!user) {
+    throw new Error("Usuário não encontrado");
+  }
+
+  if (Object.keys(data).length === 0) {
+    throw new Error("Nenhum campo enviado para atualização");
+  }
+
+  const updatedUser = await userRepository.updateUser(id, data);
+
+  return updatedUser;
+}
+
 const userService = {
   createUserService,
   getUserById,
+  patchUpdateUser,
 };
 
 export default userService;

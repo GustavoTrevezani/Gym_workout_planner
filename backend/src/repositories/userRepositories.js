@@ -18,10 +18,20 @@ async function findById(id) {
   });
 }
 
+async function updateUser(id, data) {
+  return prisma.user.update({
+    where: {
+      id,
+    },
+    data: { ...data },
+  });
+}
+
 const userRepository = {
   createUser,
   findByEmail,
   findById,
+  updateUser,
 };
 
 export default userRepository;
