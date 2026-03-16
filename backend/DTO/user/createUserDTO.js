@@ -13,8 +13,4 @@ const createUserDTO = z.object({
   age: z.number().optional(),
 });
 
-const userDTO = {
-  createUserDTO,
-};
-
-export default userDTO;
+export default createUserDTO;
