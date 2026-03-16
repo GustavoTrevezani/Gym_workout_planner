@@ -15,15 +15,29 @@ async function findByEmail(email) {
 async function findById(id) {
   return prisma.user.findUnique({
     where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      height: true,
+      weight: true,
+      age: true,
+    },
   });
 }
 
 async function updateUser(id, data) {
   return prisma.user.update({
-    where: {
-      id,
+    where: { id },
+    data: data,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      height: true,
+      weight: true,
+      age: true,
     },
-    data: { ...data },
   });
 }
 
