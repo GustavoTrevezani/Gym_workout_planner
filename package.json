@@ -5,7 +5,8 @@
     "argon2": "^0.44.0",
     "express": "^5.2.1",
     "i": "^0.3.7",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "zod": "^4.3.6"
   },
   "name": "gym_workout_planner",
   "version": "1.0.0",
