@@ -1,7 +1,7 @@
 import passwordArgon2 from "../utils/password.js";
+import appError from "../utils/AppError.js";
 
 import userRepository from "../repositories/userRepositories.js";
-import { email } from "zod";
 
 async function createUserService(userData) {
   const { name, email, password, height, weight, age } = userData;
@@ -9,7 +9,7 @@ async function createUserService(userData) {
   const userExists = await userRepository.findByEmail(email);
 
   if (userExists) {
-    throw new Error("Email já cadastrado");
+    throw new appError("Email already exist", 409);
   }
   const hashedPassword = await passwordArgon2.hashPassword(password);
 
@@ -29,7 +29,7 @@ async function getAllUsers() {
   const user = await userRepository.findAll();
 
   if (!user) {
-    throw new Error("Não há usuários");
+    throw new appError("Users not found", 404);
   }
 
   return user;
@@ -39,7 +39,7 @@ async function getUserById(id) {
   const user = await userRepository.findById(id);
 
   if (!user) {
-    throw new Error("Usuário não encontrado");
+    throw new appError("User not found", 404);
   }
 
   return user;
@@ -49,11 +49,11 @@ async function patchUpdateUser(id, data) {
   const user = await userRepository.findById(id);
 
   if (!user) {
-    throw new Error("Usuário não encontrado");
+    throw new appError("User not found", 404);
   }
 
   if (Object.keys(data).length === 0) {
-    throw new Error("Nenhum campo enviado para atualização");
+    throw new appError("At least one field must be provided for update", 411);
   }
 
   const allowedFields = ["name", "height", "weight", "age"];
@@ -75,7 +75,7 @@ async function deleteUser(id) {
   const user = await userRepository.findById(id);
 
   if (!user) {
-    throw new Error("Usuários não encontrado");
+    throw new appError("User not found", 404);
   }
 
   const userDelete = await userRepository.deleteUser(id);

@@ -1,17 +1,19 @@
+import AppError from "../utils/AppError.js";
+
 function validateDTO(schema) {
   return (req, res, next) => {
     const result = schema.safeParse(req.body);
 
     if (!result.success) {
-      return res.status(400).json({
-        errors: result.error.issues.map((issue) => ({
-          field: issue.path[0],
-          message: issue.message,
-        })),
-      });
+      const errors = result.error.issues.map((issue) => ({
+        field: issue.path[0],
+        message: issue.message,
+      }));
+
+      return next(new AppError("Validation error", 400, errors));
     }
 
-    req.validateData = result.data;
+    req.validatedData = result.data;
     next();
   };
 }
