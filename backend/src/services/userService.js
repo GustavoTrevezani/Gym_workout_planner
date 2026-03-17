@@ -56,7 +56,17 @@ async function patchUpdateUser(id, data) {
     throw new Error("Nenhum campo enviado para atualização");
   }
 
-  const updatedUser = await userRepository.updateUser(id, data);
+  const allowedFields = ["name", "height", "weight", "age"];
+
+  const filteredData = {};
+
+  for (const key of allowedFields) {
+    if (data[key] !== undefined) {
+      filteredData[key] = data[key];
+    }
+  }
+
+  const updatedUser = await userRepository.updateUser(id, filteredData);
 
   return updatedUser;
 }
