@@ -25,6 +25,16 @@ async function createUserService(userData) {
   return user;
 }
 
+async function getAllUsers() {
+  const user = await userRepository.findAll();
+
+  if (!user) {
+    throw new Error("Não há usuários");
+  }
+
+  return user;
+}
+
 async function getUserById(id) {
   const user = await userRepository.findById(id);
 
@@ -51,10 +61,24 @@ async function patchUpdateUser(id, data) {
   return updatedUser;
 }
 
+async function deleteUser(id) {
+  const user = await userRepository.findById(id);
+
+  if (!user) {
+    throw new Error("Usuários não encontrado");
+  }
+
+  const userDelete = await userRepository.deleteUser(id);
+
+  return userDelete;
+}
+
 const userService = {
   createUserService,
+  getAllUsers,
   getUserById,
   patchUpdateUser,
+  deleteUser,
 };
 
 export default userService;

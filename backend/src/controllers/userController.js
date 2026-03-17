@@ -7,6 +7,12 @@ async function createUser(req, res) {
   res.status(201).json(newUser);
 }
 
+async function findAll(req, res) {
+  const user = await userService.getAllUsers();
+
+  res.status(200).json(user);
+}
+
 async function findUser(req, res) {
   const userId = Number(req.params.id);
 
@@ -25,10 +31,20 @@ async function updateUser(req, res) {
   return res.json(userResponseDTO(updatedUser));
 }
 
+async function deleteUser(req, res) {
+  const userId = Number(req.params.id);
+
+  const deleteUser = await userService.deleteUser(userId);
+
+  return res.status(200).json(userResponseDTO(deleteUser));
+}
+
 const userController = {
   createUser,
+  findAll,
   findUser,
   updateUser,
+  deleteUser,
 };
 
 export default userController;
