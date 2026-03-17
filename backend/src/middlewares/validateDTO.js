@@ -1,8 +1,10 @@
 import AppError from "../utils/AppError.js";
 
-function validateDTO(schema) {
+function validateDTO(schema, source = "body") {
   return (req, res, next) => {
-    const result = schema.safeParse(req.body);
+    const data = req[source];
+
+    const result = schema.safeParse(data);
 
     if (!result.success) {
       const errors = result.error.issues.map((issue) => ({
@@ -13,7 +15,9 @@ function validateDTO(schema) {
       return next(new AppError("Validation error", 400, errors));
     }
 
-    req.validatedData = result.data;
+    if (source === "body") req.validatedBody = result.data;
+    if (source === "params") req.validatedParams = result.data;
+
     next();
   };
 }
