@@ -22,7 +22,8 @@ async function createUserService(userData) {
     age,
   });
 
-  return user;
+  const { password: _, ...userWithoutPassword } = user;
+  return userWithoutPassword;
 }
 
 async function getAllUsers() {
