@@ -16,6 +16,9 @@ model User {
   age             Int?
   workouts        Workout[]
   workoutSessions WorkoutSession[]
+  bodyMeasurements BodyMeasurement[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 }
 
 model Workout {
@@ -103,4 +106,36 @@ enum WeekDay {
   FRIDAY
   SATURDAY
   SUNDAY
+}
+
+model BodyMeasurement {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+
+  chest            Float?
+  shoulders        Float?
+  neck             Float?
+
+  bicepsLeft       Float?
+  bicepsRight      Float?
+  tricepsLeft      Float?
+  tricepsRight     Float?
+  forearmLeft      Float?
+  forearmRight     Float?
+
+  abdomen          Float?
+  waist            Float?
+  glutes           Float?
+
+  thighLeft        Float?
+  thighRight       Float?
+  calfLeft         Float?
+  calfRight        Float?
+
+  height           Float?
+  weight           Float?
+  bodyFatPercentage Float?
+    
+  createdAt     DateTime @default(now())
 }
